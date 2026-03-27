@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.output/
+*.log
+coverage/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Prisma
+prisma/migrations/
+!prisma/migrations/*/
+!prisma/migrations/*/migration.sql
+
+# Taro
+.project
+.miniprogram/
+
+# Misc
+temp/
+tmp/

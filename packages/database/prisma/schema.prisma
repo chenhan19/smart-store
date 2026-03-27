@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 用户表
+model User {
+  id        String   @id @default(cuid())
+  openid    String   @unique @db.VarChar(100)
+  username  String   @db.VarChar(50)
+  avatar    String?  @db.VarChar(500)
+  phone     String?  @db.VarChar(20)
+  email     String?  @db.VarChar(100)
+  password  String?  @db.VarChar(255) // 微信小程序登录不需要密码，留作扩展
+  role      String   @default("store_owner") // admin, store_owner, employee
+  status    String   @default("active") // active, inactive, banned
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 关联关系
+  stores     Store[]
+  preferences UserPreference[]
+  logs       Log[]
+
+  @@index([username])
+  @@index([phone])
+  @@index([email])
+  @@index([createdAt])
+}
+
+// 用户偏好设置
+model UserPreference {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  language  String   @default("zh-CN")
+  theme     String   @default("light") // light, dark
+  currency  String   @default("CNY")
+  notifications Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 关联关系
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// 店铺表
+model Store {
+  id              String   @id @default(cuid())
+  userId          String
+  name            String   @db.VarChar(100)
+  description     String?  @db.Text
+  address         String?  @db.VarChar(200)
+  phone           String?  @db.VarChar(20)
+  cameraStreamUrl String?  @db.VarChar(500)
+  status          String   @default("active") // active, inactive, closed
+  latitude        Float?
+  longitude       Float?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // 关联关系
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shelves Shelf[]
+  cameras Camera[]
+  reports StoreReport[]
+
+  @@index([userId])
+  @@index([name])
+  @@index([createdAt])
+}
+
+// 监控摄像头
+model Camera {
+  id        String   @id @default(cuid())
+  storeId   String
+  name      String   @db.VarChar(50)
+  streamUrl String   @db.VarChar(500)
+  position  String   @db.VarChar(50) // 摄像头位置描述
+  status    String   @default("active") // active, inactive
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 关联关系
+  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId])
+  @@index([name])
+}
+
+// 货架表
+model Shelf {
+  id              String   @id @default(cuid())
+  storeId         String
+  labelName       String   @db.VarChar(50)
+  description     String?  @db.VarChar(200)
+  position        String   @db.VarChar(10) // A1, B2等
+  capacity        Int      @default(100) // 最大容量
+  currentOccupancy Int     @default(0) // 当前占用数量
+  status          String   @default("active") // active, maintenance, inactive
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // 关联关系
+  store    Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@index([storeId])
+  @@index([labelName])
+  @@index([position])
+  @@unique([storeId, labelName])
+}
+
+// 商品表
+model Product {
+  id            String   @id @default(cuid())
+  shelfId       String
+  barcode       String   @unique @db.VarChar(50)
+  name          String   @db.VarChar(100)
+  description   String?  @db.Text
+  category      String?  @db.VarChar(50)
+  unit          String   @default("件") @db.VarChar(10)
+  price         Float    @default(0.0)
+  costPrice     Float?   @default(0.0)
+  stock         Int      @default(0)
+  minThreshold  Int      @default(10)
+  maxThreshold  Int?
+  images        String? // JSON数组存储图片URL
+  specifications Json? // 商品规格
+  status        String   @default("active") // active, out_of_stock, discontinued
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // 关联关系
+  shelf         Shelf    @relation(fields: [shelfId], references: [id], onDelete: Cascade)
+  logs          Log[]
+  productSales  ProductSale[]
+
+  @@index([shelfId])
+  @@index([barcode])
+  @@index([name])
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// 库存操作日志
+model Log {
+  id             String   @id @default(cuid())
+  productId      String
+  operationType  String   // IN, OUT, ADJUST, TRANSFER
+  quantity       Int
+  previousStock  Int
+  newStock       Int
+  operatorId     String
+  referenceId    String?  // 相关单据ID
+  remark         String?  @db.VarChar(500)
+  createdAt      DateTime @default(now())
+
+  // 关联关系
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  operator  User    @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([operatorId])
+  @@index([operationType])
+  @@index([createdAt])
+}
+
+// 商品销售记录
+model ProductSale {
+  id        String   @id @default(cuid())
+  productId String
+  quantity  Int
+  amount    Float
+  saleDate  DateTime @default(now())
+  storeId   String?
+  createdAt DateTime @default(now())
+
+  // 关联关系
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  store   Store?  @relation(fields: [storeId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+  @@index([storeId])
+  @@index([saleDate])
+}
+
+// 店铺日报表
+model StoreReport {
+  id           String   @id @default(cuid())
+  storeId      String
+  reportDate   DateTime
+  totalSales   Float    @default(0.0)
+  totalOrders  Int      @default(0)
+  totalProductsSold Int @default(0)
+  createdAt    DateTime @default(now())
+
+  // 关联关系
+  store Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@unique([storeId, reportDate])
+  @@index([storeId])
+  @@index([reportDate])
+}
+
+// 库存预警记录
+model InventoryAlert {
+  id          String   @id @default(cuid())
+  productId   String
+  alertType   String   // low_stock, out_of_stock, expiring
+  currentStock Int
+  threshold   Int
+  isResolved  Boolean  @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  createdAt   DateTime @default(now())
+
+  // 关联关系
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  resolver User?  @relation(fields: [resolvedBy], references: [id], onDelete: SetNull, name: "resolver")
+
+  @@index([productId])
+  @@index([alertType])
+  @@index([isResolved])
+  @@index([createdAt])
+}

@@ -1,0 +1,65 @@
+# 构建阶段
+FROM node:18-alpine AS builder
+
+# 安装pnpm
+RUN npm install -g pnpm
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制所有必要的文件
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+COPY apps/server/package.json ./apps/server/
+COPY packages/database/package.json ./packages/database/
+COPY packages/shared/package.json ./packages/shared/
+
+# 安装依赖
+RUN pnpm install --frozen-lockfile
+
+# 复制源代码
+COPY . .
+
+# 构建项目
+RUN pnpm build
+
+# 生产阶段
+FROM node:18-alpine AS production
+
+# 安装运行时依赖
+RUN apk add --no-cache curl
+
+# 设置工作目录
+WORKDIR /app
+
+# 从构建阶段复制文件
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/apps/server/package.json ./apps/server/
+COPY --from=builder /app/packages/database/package.json ./packages/database/
+COPY --from=builder /app/packages/shared/package.json ./packages/shared/
+
+# 仅安装生产依赖
+RUN npm install -g pnpm && \
+    pnpm install --prod --frozen-lockfile
+
+# 复制构建结果
+COPY --from=builder /app/apps/server/dist ./apps/server/dist
+COPY --from=builder /app/packages/database/dist ./packages/database/dist
+COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder /app/packages/database/prisma ./packages/database/prisma
+
+# 创建必要的目录
+RUN mkdir -p uploads logs
+
+# 设置环境变量
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# 暴露端口
+EXPOSE 3000
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+
+# 启动命令
+CMD ["node", "apps/server/dist/app.js"]

@@ -1,0 +1,45 @@
+{
+  "name": "smart-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "智慧店铺管理系统 - 基于微信小程序的多店铺智能仓储系统",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "dev:server": "turbo dev --filter=@smart-store/server",
+    "dev:mp": "turbo dev --filter=@smart-store/miniprogram",
+    "db:push": "turbo db:push",
+    "db:seed": "turbo db:seed",
+    "lint": "turbo lint",
+    "format": "turbo format",
+    "test": "turbo test",
+    "clean": "turbo clean",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "keywords": [
+    "smart-store",
+    "inventory-management",
+    "wechat-miniprogram",
+    "monorepo",
+    "taro",
+    "express"
+  ],
+  "author": "SmartStore Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "prettier": "^3.0.0",
+    "turbo": "^1.10.0",
+    "typescript": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.6.0"
+}

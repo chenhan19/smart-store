@@ -1,0 +1,53 @@
+{
+  "name": "@smart-store/miniprogram",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart Store WeChat Mini Program",
+  "scripts": {
+    "build:weapp": "taro build --type weapp",
+    "build:weapp:watch": "taro build --type weapp --watch",
+    "build:h5": "taro build --type h5",
+    "build:h5:watch": "taro build --type h5 --watch",
+    "dev:weapp": "npm run build:weapp -- --watch",
+    "dev:h5": "npm run build:h5 -- --watch",
+    "lint": "eslint . --ext .ts,.vue --fix",
+    "format": "prettier --write \"src/**/*.{ts,js,json,vue}\"",
+    "clean": "rm -rf dist"
+  },
+  "browserslist": [
+    "last 3 versions",
+    "Android >= 4.1",
+    "ios >= 8"
+  ],
+  "dependencies": {
+    "@smart-store/shared": "workspace:*",
+    "@tarojs/components": "^3.6.0",
+    "@tarojs/taro": "^3.6.0",
+    "@tarojs/react": "^3.6.0",
+    "@tarojs/runtime": "^3.6.0",
+    "mitt": "^3.0.0",
+    "nutui-taro": "^4.0.7",
+    "pinia": "^2.1.0",
+    "vue": "^3.3.0",
+    "vue-i18n": "^9.3.0",
+    "vue-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "@tarojs/mini-runner": "^3.6.0",
+    "@tarojs/webpack-runner": "^3.6.0",
+    "@types/wechat-miniprogram": "^3.4.1",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vue/babel-plugin-jsx": "^1.1.1",
+    "@vue/compiler-sfc": "^3.3.0",
+    "babel-plugin-import": "^1.13.5",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "prettier": "^3.0.0",
+    "sass": "^1.64.0",
+    "typescript": "^5.1.0"
+  }
+}
