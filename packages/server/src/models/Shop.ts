@@ -20,31 +20,16 @@ export class Shop extends Model<ShopAttributes, ShopCreationAttributes> implemen
   static initModel(sequelize: Sequelize): typeof Shop {
     Shop.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-        name: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        ownerId: {
-          type: DataTypes.INTEGER,
-          field: 'owner_id',
-          allowNull: false,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-        },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        name: { type: DataTypes.STRING, allowNull: false },
+        ownerId: { type: DataTypes.INTEGER, field: 'owner_id', allowNull: false },
       },
       {
         sequelize,
         tableName: 'shops',
         timestamps: true,
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
       }
     );
     return Shop;

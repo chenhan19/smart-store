@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "smart-shop",
   "description": "智慧店铺微信小程序",
-  "appid": "YOUR_APPID_HERE",
+  "appid": "wx30844ef4f77c7628",
   "setting": {
     "urlCheck": false,
     "es6": false,

@@ -1,11 +1,9 @@
-version: '3.9'
-
 # 生产部署：MySQL + Server
 # 用法：docker compose --env-file .env up -d
 
 services:
   mysql:
-    image: mysql:8.0
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mysql:8.0
     container_name: smart-shop-mysql
     restart: unless-stopped
     environment:

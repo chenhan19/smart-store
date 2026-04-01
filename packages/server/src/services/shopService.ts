@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { Shop } from '../models/Shop';
 import { ShopMember } from '../models/ShopMember';
 import { User } from '../models/User';
@@ -11,12 +12,19 @@ export async function createShop(ownerId: number, name: string): Promise<Shop> {
   });
 }
 
-export async function getShopsByUser(userId: number): Promise<Shop[]> {
-  const members = await ShopMember.findAll({
-    where: { userId },
-    include: [{ model: Shop }],
-  });
-  return members.map((m) => (m as any).Shop as Shop).filter(Boolean);
+export async function getShopsByUser(userId: number): Promise<any[]> {
+  const members = await ShopMember.findAll({ where: { userId }, attributes: ['shopId'] });
+  if (members.length === 0) return [];
+  const shopIds = members.map((m) => m.shopId);
+  const shops = await Shop.findAll({ where: { id: { [Op.in]: shopIds } } });
+  // 统一返回 camelCase 字段名
+  return shops.map((s) => ({
+    id: s.id,
+    name: s.name,
+    ownerId: s.ownerId,
+    createdAt: s.createdAt,
+    updatedAt: s.updatedAt,
+  }));
 }
 
 export async function getShopById(shopId: number): Promise<Shop> {

@@ -34,57 +34,22 @@ export class StockRecord
   static initModel(sequelize: Sequelize): typeof StockRecord {
     StockRecord.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-        shopId: {
-          type: DataTypes.INTEGER,
-          field: 'shop_id',
-          allowNull: false,
-        },
-        productId: {
-          type: DataTypes.INTEGER,
-          field: 'product_id',
-          allowNull: false,
-        },
-        operatorId: {
-          type: DataTypes.INTEGER,
-          field: 'operator_id',
-          allowNull: false,
-        },
-        type: {
-          type: DataTypes.ENUM('in', 'out'),
-          allowNull: false,
-        },
-        quantity: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        quantityBefore: {
-          type: DataTypes.INTEGER,
-          field: 'quantity_before',
-          allowNull: false,
-        },
-        quantityAfter: {
-          type: DataTypes.INTEGER,
-          field: 'quantity_after',
-          allowNull: false,
-        },
-        remark: {
-          type: DataTypes.STRING,
-          allowNull: true,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-        },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        shopId: { type: DataTypes.INTEGER, field: 'shop_id', allowNull: false },
+        productId: { type: DataTypes.INTEGER, field: 'product_id', allowNull: false },
+        operatorId: { type: DataTypes.INTEGER, field: 'operator_id', allowNull: false },
+        type: { type: DataTypes.ENUM('in', 'out'), allowNull: false },
+        quantity: { type: DataTypes.INTEGER, allowNull: false },
+        quantityBefore: { type: DataTypes.INTEGER, field: 'quantity_before', allowNull: false },
+        quantityAfter: { type: DataTypes.INTEGER, field: 'quantity_after', allowNull: false },
+        remark: { type: DataTypes.STRING, allowNull: true },
       },
       {
         sequelize,
         tableName: 'stock_records',
         timestamps: true,
         updatedAt: false,
+        createdAt: 'created_at',
       }
     );
     return StockRecord;

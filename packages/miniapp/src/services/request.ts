@@ -1,7 +1,13 @@
 import Taro from '@tarojs/taro'
 import { useAuthStore } from '../store/authStore'
 
-const BASE_URL = process.env.TARO_APP_API_URL || 'http://localhost:3000'
+// TARO_APP_API_URL 由 config/index.ts 的 defineConstants 在编译时注入
+// 声明为 declare 避免 TS 报错，实际值由 webpack DefinePlugin 替换
+declare const TARO_APP_API_URL: string
+
+const BASE_URL = (typeof TARO_APP_API_URL !== 'undefined' && TARO_APP_API_URL)
+  ? TARO_APP_API_URL
+  : 'http://localhost:3000'
 
 interface RequestOptions {
   url: string

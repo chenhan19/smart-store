@@ -34,58 +34,22 @@ export class Product
   static initModel(sequelize: Sequelize): typeof Product {
     Product.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-        shopId: {
-          type: DataTypes.INTEGER,
-          field: 'shop_id',
-          allowNull: false,
-        },
-        name: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        code: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        category: {
-          type: DataTypes.STRING,
-          defaultValue: '',
-        },
-        spec: {
-          type: DataTypes.STRING,
-          defaultValue: '',
-        },
-        unit: {
-          type: DataTypes.STRING,
-          defaultValue: '',
-        },
-        alertThreshold: {
-          type: DataTypes.INTEGER,
-          field: 'alert_threshold',
-          defaultValue: 0,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-        },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        shopId: { type: DataTypes.INTEGER, field: 'shop_id', allowNull: false },
+        name: { type: DataTypes.STRING, allowNull: false },
+        code: { type: DataTypes.STRING, allowNull: false },
+        category: { type: DataTypes.STRING, defaultValue: '' },
+        spec: { type: DataTypes.STRING, defaultValue: '' },
+        unit: { type: DataTypes.STRING, defaultValue: '' },
+        alertThreshold: { type: DataTypes.INTEGER, field: 'alert_threshold', defaultValue: 0 },
       },
       {
         sequelize,
         tableName: 'products',
         timestamps: true,
-        indexes: [
-          {
-            unique: true,
-            fields: ['shop_id', 'code'],
-          },
-        ],
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
+        indexes: [{ unique: true, fields: ['shop_id', 'code'] }],
       }
     );
     return Product;

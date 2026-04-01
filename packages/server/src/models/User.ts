@@ -40,15 +40,14 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
           field: 'avatar_url',
           defaultValue: '',
         },
-        createdAt: {
-          type: DataTypes.DATE,
-        },
+        // 不在此处定义 createdAt，由 timestamps: true + createdAt: 'created_at' 自动处理
       },
       {
         sequelize,
         tableName: 'users',
         timestamps: true,
         updatedAt: false,
+        createdAt: 'created_at',
       }
     );
     return User;

@@ -3,6 +3,7 @@ import { View, Text, Input, Button } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import { useShopStore } from '../../../store/shopStore'
 import { createShop, updateShop } from '../../../services/shopApi'
+import { redirectTo } from '../../../utils/navigate'
 import './index.scss'
 
 export default function ShopCreatePage() {
@@ -28,7 +29,7 @@ export default function ShopCreatePage() {
       } else {
         const res = await createShop(name.trim())
         setCurrentShop(res.data)
-        Taro.redirectTo({ url: '/pages/home/index' })
+        redirectTo('/pages/home/index')
       }
     } catch {
       // error handled in request

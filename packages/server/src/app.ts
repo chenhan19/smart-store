@@ -28,7 +28,9 @@ async function start() {
     await sequelize.authenticate();
     console.log('Database connection established.');
 
-    await sequelize.sync({ alter: true });
+    // sync({ force: false }) 只创建不存在的表，不修改已有表结构
+    // 表结构变更请使用 init-db.sql 或迁移工具
+    await sequelize.sync({ force: false });
     console.log('Models synchronized.');
 
     app.listen(PORT, () => {

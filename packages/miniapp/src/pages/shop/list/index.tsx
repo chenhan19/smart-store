@@ -5,6 +5,12 @@ import { useShopStore } from '../../../store/shopStore'
 import { getShops } from '../../../services/shopApi'
 import './index.scss'
 
+function formatDate(val: any): string {
+  if (!val) return ''
+  const d = new Date(val)
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString()
+}
+
 export default function ShopListPage() {
   const { shops, setShops, setCurrentShop } = useShopStore()
   const [loading, setLoading] = useState(false)
@@ -47,7 +53,7 @@ export default function ShopListPage() {
             <View key={shop.id} className='shop-item' onClick={() => handleSelect(shop)}>
               <View className='shop-info'>
                 <Text className='shop-name'>{shop.name}</Text>
-                <Text className='shop-date'>{new Date(shop.createdAt).toLocaleDateString()}</Text>
+                <Text className='shop-date'>{formatDate(shop.createdAt || (shop as any).created_at)}</Text>
               </View>
               <Text className='arrow'>›</Text>
             </View>

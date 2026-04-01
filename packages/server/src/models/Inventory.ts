@@ -23,40 +23,18 @@ export class Inventory
   static initModel(sequelize: Sequelize): typeof Inventory {
     Inventory.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-        shopId: {
-          type: DataTypes.INTEGER,
-          field: 'shop_id',
-          allowNull: false,
-        },
-        productId: {
-          type: DataTypes.INTEGER,
-          field: 'product_id',
-          allowNull: false,
-        },
-        quantity: {
-          type: DataTypes.INTEGER,
-          defaultValue: 0,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-        },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        shopId: { type: DataTypes.INTEGER, field: 'shop_id', allowNull: false },
+        productId: { type: DataTypes.INTEGER, field: 'product_id', allowNull: false },
+        quantity: { type: DataTypes.INTEGER, defaultValue: 0 },
       },
       {
         sequelize,
         tableName: 'inventory',
         timestamps: true,
         createdAt: false,
-        indexes: [
-          {
-            unique: true,
-            fields: ['shop_id', 'product_id'],
-          },
-        ],
+        updatedAt: 'updated_at',
+        indexes: [{ unique: true, fields: ['shop_id', 'product_id'] }],
       }
     );
     return Inventory;

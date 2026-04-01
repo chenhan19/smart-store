@@ -22,6 +22,7 @@ export default function StatisticsPage() {
   const [startDate, setStartDate] = useState(getDateStr(-6))
   const [endDate, setEndDate] = useState(getDateStr(0))
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   if (user?.role !== 'owner') {
     return <View className='no-permission'><Text>无权限访问统计页面</Text></View>
@@ -30,19 +31,20 @@ export default function StatisticsPage() {
   const fetchAll = async () => {
     if (!currentShop) return
     setLoading(true)
+    setError(false)
     try {
+      // 逐个请求，避免一个失败影响其他
       const [s, t, c, top] = await Promise.all([
-        getSummary(currentShop.id),
-        getTrend(currentShop.id, startDate, endDate),
-        getCategoryDistribution(currentShop.id),
-        getTopInventory(currentShop.id),
+        getSummary(currentShop.id).catch(() => null),
+        getTrend(currentShop.id, startDate, endDate).catch(() => null),
+        getCategoryDistribution(currentShop.id).catch(() => null),
+        getTopInventory(currentShop.id).catch(() => null),
       ])
-      setSummary(s.data)
-      setTrend(t.data)
-      setCategories(c.data || [])
-      setTopInventory(top.data || [])
-    } catch {
-      // handled in request
+      if (s) setSummary(s.data)
+      if (t) setTrend(t.data)
+      if (c) setCategories(c.data || [])
+      if (top) setTopInventory(top.data || [])
+      if (!s && !t && !c && !top) setError(true)
     } finally {
       setLoading(false)
     }
@@ -54,6 +56,13 @@ export default function StatisticsPage() {
 
   return (
     <View className='statistics-page'>
+      {loading && <View className='loading'><Text>加载中...</Text></View>}
+      {error && (
+        <View className='error-bar'>
+          <Text>加载失败，</Text>
+          <Text className='retry' onClick={fetchAll}>点击重试</Text>
+        </View>
+      )}
       {/* Summary Cards */}
       {summary && (
         <View className='summary-grid'>

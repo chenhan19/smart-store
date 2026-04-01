@@ -1,7 +1,7 @@
 import { View, Text } from '@tarojs/components'
-import Taro from '@tarojs/taro'
 import { useAuthStore } from '../../store/authStore'
 import { useShopStore } from '../../store/shopStore'
+import { navigateTo } from '../../utils/navigate'
 import './index.scss'
 
 interface MenuItem {
@@ -28,10 +28,6 @@ export default function HomePage() {
 
   const visibleItems = MENU_ITEMS.filter((item) => !item.ownerOnly || isOwner)
 
-  const handleNav = (url: string) => {
-    Taro.navigateTo({ url })
-  }
-
   return (
     <View className='home-page'>
       <View className='shop-bar'>
@@ -41,7 +37,7 @@ export default function HomePage() {
 
       <View className='menu-grid'>
         {visibleItems.map((item) => (
-          <View key={item.url} className='menu-item' onClick={() => handleNav(item.url)}>
+          <View key={item.url} className='menu-item' onClick={() => navigateTo(item.url)}>
             <Text className='menu-icon'>{item.icon}</Text>
             <Text className='menu-label'>{item.label}</Text>
           </View>

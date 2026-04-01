@@ -1,22 +1,20 @@
-import { Op, fn, col, literal } from 'sequelize';
 import { sequelize } from '../config/database';
-import { StockRecord } from '../models/StockRecord';
-import { Inventory } from '../models/Inventory';
 import { Product } from '../models/Product';
 
 export async function getSummary(shopId: number) {
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const todayEnd = new Date();
-  todayEnd.setHours(23, 59, 59, 999);
+  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
   const [todayInboundResult, todayOutboundResult, productCount, alertCount] = await Promise.all([
-    StockRecord.sum('quantity', {
-      where: { shopId, type: 'in', createdAt: { [Op.between]: [todayStart, todayEnd] } },
-    }),
-    StockRecord.sum('quantity', {
-      where: { shopId, type: 'out', createdAt: { [Op.between]: [todayStart, todayEnd] } },
-    }),
+    sequelize.query(
+      `SELECT COALESCE(SUM(quantity), 0) as total FROM stock_records
+       WHERE shop_id = :shopId AND type = 'in' AND DATE(created_at) = :today`,
+      { replacements: { shopId, today }, type: 'SELECT' }
+    ),
+    sequelize.query(
+      `SELECT COALESCE(SUM(quantity), 0) as total FROM stock_records
+       WHERE shop_id = :shopId AND type = 'out' AND DATE(created_at) = :today`,
+      { replacements: { shopId, today }, type: 'SELECT' }
+    ),
     Product.count({ where: { shopId } }),
     sequelize.query(
       `SELECT COUNT(*) as cnt FROM inventory i
@@ -27,10 +25,10 @@ export async function getSummary(shopId: number) {
   ]);
 
   return {
-    todayInbound: todayInboundResult || 0,
-    todayOutbound: todayOutboundResult || 0,
+    todayInbound: Number((todayInboundResult[0] as any)?.total) || 0,
+    todayOutbound: Number((todayOutboundResult[0] as any)?.total) || 0,
     productCount,
-    alertCount: (alertCount[0] as any)?.cnt || 0,
+    alertCount: Number((alertCount[0] as any)?.cnt) || 0,
   };
 }
 

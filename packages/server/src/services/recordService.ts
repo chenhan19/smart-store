@@ -1,4 +1,4 @@
-import { Op, WhereOptions } from 'sequelize';
+import { Op, WhereOptions, literal } from 'sequelize';
 import { StockRecord } from '../models/StockRecord';
 import { Product } from '../models/Product';
 import { User } from '../models/User';
@@ -24,15 +24,18 @@ export async function listRecords(
     (where as any).type = type;
   }
 
-  if (startDate || endDate) {
-    const dateRange: any = {};
-    if (startDate) {
-      dateRange[Op.gte] = new Date(startDate + 'T00:00:00.000Z');
-    }
-    if (endDate) {
-      dateRange[Op.lte] = new Date(endDate + 'T23:59:59.999Z');
-    }
-    (where as any).createdAt = dateRange;
+  // Use literal with raw column name to avoid Sequelize camelCase → snake_case mapping issues
+  if (startDate) {
+    (where as any)[Op.and] = [
+      ...((where as any)[Op.and] || []),
+      literal(`\`StockRecord\`.\`created_at\` >= '${startDate} 00:00:00'`),
+    ];
+  }
+  if (endDate) {
+    (where as any)[Op.and] = [
+      ...((where as any)[Op.and] || []),
+      literal(`\`StockRecord\`.\`created_at\` <= '${endDate} 23:59:59'`),
+    ];
   }
 
   const productWhere: WhereOptions | undefined = keyword
@@ -61,7 +64,7 @@ export async function listRecords(
         attributes: ['id', 'nickname'],
       },
     ],
-    order: [['createdAt', 'DESC']],
+    order: [[literal('`StockRecord`.`created_at`'), 'DESC']],
     limit: pageSize,
     offset,
     distinct: true,

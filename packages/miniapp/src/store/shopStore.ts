@@ -12,7 +12,9 @@ interface ShopState {
   shops: Shop[]
   setCurrentShop: (shop: Shop) => void
   setShops: (shops: Shop[]) => void
-  loadFromStorage: () => void
+  // 只持久化 shopId，不存完整对象
+  saveLastShopId: (shopId: number) => void
+  getLastShopId: () => number | null
   clearShop: () => void
 }
 
@@ -21,7 +23,8 @@ export const useShopStore = create<ShopState>((set) => ({
   shops: [],
 
   setCurrentShop: (shop) => {
-    Taro.setStorageSync('currentShop', JSON.stringify(shop))
+    // 只存 id，不存完整 shop 对象
+    Taro.setStorageSync('lastShopId', String(shop.id))
     set({ currentShop: shop })
   },
 
@@ -29,19 +32,21 @@ export const useShopStore = create<ShopState>((set) => ({
     set({ shops })
   },
 
-  loadFromStorage: () => {
+  saveLastShopId: (shopId) => {
+    Taro.setStorageSync('lastShopId', String(shopId))
+  },
+
+  getLastShopId: () => {
     try {
-      const shopStr = Taro.getStorageSync('currentShop')
-      if (shopStr) {
-        set({ currentShop: JSON.parse(shopStr) })
-      }
+      const id = Taro.getStorageSync('lastShopId')
+      return id ? parseInt(id) : null
     } catch {
-      // ignore
+      return null
     }
   },
 
   clearShop: () => {
-    Taro.removeStorageSync('currentShop')
+    Taro.removeStorageSync('lastShopId')
     set({ currentShop: null, shops: [] })
   },
 }))

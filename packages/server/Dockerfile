@@ -1,5 +1,5 @@
 # ---- Build stage ----
-FROM node:20-alpine AS builder
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:20-alpine AS builder
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
@@ -33,7 +33,7 @@ RUN node -e "\
 RUN pnpm --filter @smart-shop/server build
 
 # ---- Runtime stage ----
-FROM node:20-alpine AS runtime
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:20-alpine AS runtime
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 

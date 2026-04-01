@@ -12,7 +12,7 @@ interface AuthState {
   user: AuthUser | null
   login: (token: string, user: AuthUser) => void
   logout: () => void
-  loadFromStorage: () => void
+  loadTokenFromStorage: () => string | null
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -20,27 +20,27 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
 
   login: (token, user) => {
+    // 只持久化 token，user 信息仅存内存
     Taro.setStorageSync('token', token)
-    Taro.setStorageSync('user', JSON.stringify(user))
     set({ token, user })
   },
 
   logout: () => {
     Taro.removeStorageSync('token')
-    Taro.removeStorageSync('user')
-    Taro.removeStorageSync('currentShop')
+    Taro.removeStorageSync('lastShopId')
     set({ token: null, user: null })
   },
 
-  loadFromStorage: () => {
+  loadTokenFromStorage: () => {
     try {
       const token = Taro.getStorageSync('token')
-      const userStr = Taro.getStorageSync('user')
-      if (token && userStr) {
-        set({ token, user: JSON.parse(userStr) })
+      if (token) {
+        set({ token })
+        return token
       }
     } catch {
       // ignore
     }
+    return null
   },
 }))

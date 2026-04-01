@@ -23,40 +23,18 @@ export class ShopMember
   static initModel(sequelize: Sequelize): typeof ShopMember {
     ShopMember.init(
       {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-        shopId: {
-          type: DataTypes.INTEGER,
-          field: 'shop_id',
-          allowNull: false,
-        },
-        userId: {
-          type: DataTypes.INTEGER,
-          field: 'user_id',
-          allowNull: false,
-        },
-        role: {
-          type: DataTypes.ENUM('owner', 'operator'),
-          allowNull: false,
-        },
-        createdAt: {
-          type: DataTypes.DATE,
-        },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        shopId: { type: DataTypes.INTEGER, field: 'shop_id', allowNull: false },
+        userId: { type: DataTypes.INTEGER, field: 'user_id', allowNull: false },
+        role: { type: DataTypes.ENUM('owner', 'operator'), allowNull: false },
       },
       {
         sequelize,
         tableName: 'shop_members',
         timestamps: true,
         updatedAt: false,
-        indexes: [
-          {
-            unique: true,
-            fields: ['shop_id', 'user_id'],
-          },
-        ],
+        createdAt: 'created_at',
+        indexes: [{ unique: true, fields: ['shop_id', 'user_id'] }],
       }
     );
     return ShopMember;

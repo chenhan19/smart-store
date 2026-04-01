@@ -1,5 +1,5 @@
 # 开发镜像 - 支持热重载，挂载源码卷
-FROM node:20-alpine
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/node:20-alpine
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 

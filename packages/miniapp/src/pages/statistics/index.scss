@@ -97,6 +97,16 @@
     .top-qty { font-size: 28px; font-weight: bold; color: #1890ff; }
   }
 
-  .no-data { text-align: center; color: #bbb; padding: 40px 0; font-size: 28px; }
+  .loading { text-align: center; color: #999; padding: 40px 0; font-size: 28px; }
+  .error-bar {
+    background: #fff1f0;
+    border: 1px solid #ffa39e;
+    border-radius: 12px;
+    padding: 20px 32px;
+    margin-bottom: 24px;
+    font-size: 26px;
+    color: #ff4d4f;
+    .retry { color: #1890ff; margin-left: 8px; text-decoration: underline; }
+  }
   .no-permission { text-align: center; color: #999; padding: 80px 0; font-size: 28px; }
 }

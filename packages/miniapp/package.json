@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@tarojs/components": "3.6.x",
+    "@tarojs/plugin-framework-react": "3.6.x",
     "@tarojs/plugin-platform-weapp": "3.6.x",
     "@tarojs/react": "3.6.x",
     "@tarojs/runtime": "3.6.x",
@@ -19,7 +20,10 @@
   },
   "devDependencies": {
     "@tarojs/cli": "3.6.x",
+    "@tarojs/helper": "3.6.x",
+    "@tarojs/webpack5-runner": "3.6.x",
     "@types/react": "^18.0.0",
+    "babel-preset-taro": "3.6.x",
     "typescript": "^5.0.0"
   }
 }

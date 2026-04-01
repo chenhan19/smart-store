@@ -20,6 +20,9 @@ export function errorHandler(
   const code = err.code || 'INTERNAL_SERVER_ERROR';
   const message = err.message || '服务器内部错误';
 
+  // 打印完整错误到日志，方便调试
+  console.error('[ErrorHandler]', status, message, err.stack || err);
+
   res.status(status).json({
     code,
     message,
