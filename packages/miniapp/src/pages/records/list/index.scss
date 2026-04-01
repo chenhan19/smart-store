@@ -1,0 +1,86 @@
+.records-list-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 32px;
+
+  .filters {
+    margin-bottom: 16px;
+
+    .search-input {
+      background: #fff;
+      border-radius: 40px;
+      padding: 16px 24px;
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .type-tabs {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+
+      .tab {
+        padding: 8px 28px;
+        border-radius: 32px;
+        font-size: 26px;
+        background: #f0f0f0;
+        color: #666;
+
+        &.active { background: #1890ff; color: #fff; }
+      }
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .date-input {
+        flex: 1;
+        background: #fff;
+        border-radius: 12px;
+        padding: 12px 20px;
+        font-size: 24px;
+      }
+      .date-sep { color: #999; font-size: 28px; }
+    }
+  }
+
+  .total-text { font-size: 24px; color: #999; margin-bottom: 16px; display: block; }
+
+  .list { flex: 1; overflow: hidden; }
+
+  .record-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .left { display: flex; align-items: center; gap: 20px; }
+
+    .type-badge {
+      font-size: 24px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+      &.in { background: #f6ffed; color: #52c41a; }
+      &.out { background: #fff1f0; color: #ff4d4f; }
+    }
+
+    .product-name { font-size: 28px; font-weight: 500; display: block; }
+    .operator { font-size: 22px; color: #999; display: block; margin-top: 4px; }
+
+    .qty { font-size: 32px; font-weight: bold; &.in { color: #52c41a; } &.out { color: #ff4d4f; } }
+  }
+
+  .loading, .no-more, .empty {
+    text-align: center;
+    color: #bbb;
+    padding: 32px 0;
+    font-size: 26px;
+  }
+}

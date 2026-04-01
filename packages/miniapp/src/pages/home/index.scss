@@ -1,0 +1,36 @@
+.home-page {
+  padding: 32px;
+
+  .shop-bar {
+    background: #1890ff;
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .shop-label { font-size: 24px; color: rgba(255,255,255,0.8); }
+    .shop-name { font-size: 32px; font-weight: bold; color: #fff; }
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .menu-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+
+    .menu-icon { font-size: 48px; }
+    .menu-label { font-size: 24px; color: #333; text-align: center; }
+  }
+}

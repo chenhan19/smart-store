@@ -1,0 +1,41 @@
+.inventory-list-page {
+  padding: 32px;
+
+  .filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .search-input, .category-input {
+      flex: 1;
+      background: #fff;
+      border-radius: 40px;
+      padding: 16px 24px;
+      font-size: 26px;
+    }
+  }
+
+  .inventory-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid transparent;
+
+    &.alert { border-left-color: #ff4d4f; background: #fff8f8; }
+
+    .name-row { display: flex; align-items: center; gap: 12px; }
+    .name { font-size: 30px; font-weight: 500; }
+    .alert-badge { font-size: 22px; color: #ff4d4f; }
+    .code { font-size: 24px; color: #999; display: block; margin-top: 4px; }
+    .meta { font-size: 22px; color: #bbb; display: block; margin-top: 4px; }
+
+    .qty { font-size: 40px; font-weight: bold; color: #1890ff; }
+    .qty.alert-qty { color: #ff4d4f; }
+  }
+
+  .empty { text-align: center; color: #999; padding: 80px 0; font-size: 28px; }
+}

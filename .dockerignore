@@ -1,0 +1,12 @@
+node_modules
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+.git
+.gitignore
+*.md
+.kiro
+.vscode
+packages/miniapp

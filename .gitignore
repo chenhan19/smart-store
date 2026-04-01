@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+**/dist
+.env
+.env.dev
+*.local
+
+# Taro build output
+packages/miniapp/dist
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db

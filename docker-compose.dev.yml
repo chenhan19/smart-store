@@ -1,0 +1,72 @@
+version: '3.9'
+
+# 本地调试模式：MySQL 在 Docker，server 源码热重载也在 Docker（挂载卷）
+# 用法：docker compose -f docker-compose.dev.yml --env-file .env.dev up
+#
+# server 会挂载本地 packages/ 目录，nodemon 监听文件变化自动重启
+# MySQL 端口映射到宿主机 3307，避免与本地 MySQL 冲突
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: smart-shop-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"   # 宿主机 3307 → 容器 3306，避免与本地 MySQL 冲突
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+      - ./packages/server/src/config/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - smart-shop-dev-net
+
+  server:
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile.dev
+    container_name: smart-shop-server-dev
+    restart: unless-stopped
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASS: ${MYSQL_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:-dev_secret}
+      WX_APP_ID: ${WX_APP_ID:-}
+      WX_APP_SECRET: ${WX_APP_SECRET:-}
+      PORT: 3000
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    volumes:
+      # 挂载源码，实现热重载
+      - ./packages/shared:/app/packages/shared
+      - ./packages/server:/app/packages/server
+      # 排除 node_modules，使用容器内的
+      - /app/packages/shared/node_modules
+      - /app/packages/server/node_modules
+      - /app/node_modules
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - smart-shop-dev-net
+
+volumes:
+  mysql_dev_data:
+    driver: local
+
+networks:
+  smart-shop-dev-net:
+    driver: bridge

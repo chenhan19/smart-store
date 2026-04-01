@@ -1,0 +1,25 @@
+{
+  "name": "@smart-shop/miniapp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:weapp": "taro build --type weapp --watch",
+    "build:weapp": "taro build --type weapp"
+  },
+  "dependencies": {
+    "@tarojs/components": "3.6.x",
+    "@tarojs/plugin-platform-weapp": "3.6.x",
+    "@tarojs/react": "3.6.x",
+    "@tarojs/runtime": "3.6.x",
+    "@tarojs/taro": "3.6.x",
+    "@smart-shop/shared": "workspace:*",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "zustand": "^4.4.0"
+  },
+  "devDependencies": {
+    "@tarojs/cli": "3.6.x",
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

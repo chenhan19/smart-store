@@ -1,0 +1,31 @@
+.shop-list-page {
+  padding: 32px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+
+    .title { font-size: 36px; font-weight: bold; }
+    .add-btn { font-size: 28px; color: #1890ff; }
+  }
+
+  .shop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+
+    .shop-name { font-size: 32px; font-weight: 500; display: block; }
+    .shop-date { font-size: 24px; color: #999; margin-top: 8px; display: block; }
+    .arrow { font-size: 40px; color: #ccc; }
+  }
+
+  .empty { text-align: center; color: #999; padding: 80px 0; font-size: 28px; }
+  .loading { text-align: center; padding: 80px 0; color: #999; }
+}
