@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, IRouter } from 'express';
 import { authenticateJWT } from '../middlewares/authenticateJWT';
 import { verifyShopAccess } from '../middlewares/verifyShopAccess';
 import * as shopController from '../controllers/shopController';
@@ -9,7 +9,7 @@ import outboundRouter from './outbound';
 import recordsRouter from './records';
 import statisticsRouter from './statistics';
 
-const router = Router();
+const router: IRouter = Router();
 
 router.get('/', authenticateJWT, shopController.getShops);
 router.post('/', authenticateJWT, shopController.createShop);

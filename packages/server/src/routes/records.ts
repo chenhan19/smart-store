@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import { Router, IRouter } from 'express';
 import { authenticateJWT } from '../middlewares/authenticateJWT';
 import { verifyShopAccess } from '../middlewares/verifyShopAccess';
 import * as recordController from '../controllers/recordController';
 
-const router = Router({ mergeParams: true });
+const router: IRouter = Router({ mergeParams: true });
 
 router.get('/', authenticateJWT, verifyShopAccess, recordController.listRecords);
 

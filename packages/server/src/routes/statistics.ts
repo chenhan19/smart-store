@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router, IRouter } from 'express';
 import { authenticateJWT } from '../middlewares/authenticateJWT';
 import { verifyShopAccess } from '../middlewares/verifyShopAccess';
 import { roleGuard } from '../middlewares/roleGuard';
 import * as statisticsController from '../controllers/statisticsController';
 
-const router = Router({ mergeParams: true });
+const router: IRouter = Router({ mergeParams: true });
 
 const ownerOnly = [authenticateJWT, verifyShopAccess, roleGuard(['owner'])];
 

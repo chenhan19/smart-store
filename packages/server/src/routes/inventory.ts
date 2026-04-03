@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import { Router, IRouter } from 'express';
 import { authenticateJWT } from '../middlewares/authenticateJWT';
 import { verifyShopAccess } from '../middlewares/verifyShopAccess';
 import * as inventoryController from '../controllers/inventoryController';
 
-const router = Router({ mergeParams: true });
+const router: IRouter = Router({ mergeParams: true });
 
 router.get('/', authenticateJWT, verifyShopAccess, inventoryController.listInventory);
 router.put('/:productId/threshold', authenticateJWT, verifyShopAccess, inventoryController.setAlertThreshold);

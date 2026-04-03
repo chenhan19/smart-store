@@ -1,14 +1,14 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import express from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
 import { sequelize } from './models/index';
 import { errorHandler } from './middlewares/errorHandler';
 import authRouter from './routes/auth';
 import shopsRouter from './routes/shops';
 
-const app = express();
+const app: Express = express();
 
 // Middleware
 app.use(cors());
