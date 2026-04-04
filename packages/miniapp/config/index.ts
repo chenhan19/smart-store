@@ -2,7 +2,8 @@ import { defineConfig } from '@tarojs/cli'
 
 // 读取环境变量，构建时注入到小程序代码中
 // 开发时在 .env.dev 中设置 TARO_APP_API_URL=http://localhost:3000
-const apiUrl = process.env.TARO_APP_API_URL || 'http://localhost:3000'
+// 生产构建时设置 TARO_APP_API_URL=https://chenhanwen.site:3000
+const apiUrl = process.env.TARO_APP_API_URL || 'https://chenhanwen.site:3000'
 
 export default defineConfig({
   projectName: 'smart-shop',
